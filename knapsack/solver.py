@@ -45,10 +45,10 @@ def fill_it(capacity, items):
 def recursive_fill(capacity, items):
     if ( capacity > 0 ):
         if ( len(items) > 0 ):
-            valueWith, takenWith = fill_it(capacity - items[0].weight, items[1:] )
+            valueWith, takenWith = recursive_fill(capacity - items[0].weight, items[1:] )
             valueWith = valueWith + items[0].value
             takenWith[items[0].index] = 1
-            valueWithout, takenWithout = fill_it( capacity, items[1:] )
+            valueWithout, takenWithout = recursive_fill( capacity, items[1:] )
             valueSet = True
             if ( valueWith > valueWithout ):
                 return (valueWith, takenWith)
