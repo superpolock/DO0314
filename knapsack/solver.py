@@ -27,8 +27,7 @@ def solve_it(input_data):
         items.append(Item(i-1, value, weight,float(value)/weight))
         print items[-1]
 
-    # a trivial greedy algorithm for filling the knapsack
-    # it takes items in-order until the knapsack is full
+    # Filling the knapsack in order based on the most value dense items
     value = 0
     weight = 0
     taken = [0]*len(items)
@@ -43,8 +42,8 @@ def solve_it(input_data):
             if weight == capacity:
                 break
         else:
-            remainingSpace = capacity - weight
             maximumValue = value + (item.value * (remainingSpace/item.weight))
+            print "MaximumValue: "+str(maximumValue)
 
     # tree to find best value
     # 
