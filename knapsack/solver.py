@@ -16,11 +16,13 @@ def solve_it(input_data):
 
     print "Capacity: " + format(capacity)
     items = []
+    maximumValue = 0.0
 
     for i in range(1, item_count+1):
         line = lines[i]
         parts = line.split()
         value = int(parts[0])
+        maximumValue += value
         weight =  int(parts[1])
         items.append(Item(i-1, value, weight,float(value)/weight))
         print items[-1]
@@ -38,6 +40,13 @@ def solve_it(input_data):
             taken[item.index] = 1
             value += item.value
             weight += item.weight
+        else:
+            remainingSpace = capacity - weight
+            maximumValue = value + (item.value * (remainingSpace/item.weight))
+            break
+
+    # tree to find best value
+    # 
     
     # prepare the solution in the specified output format
     output_data = str(value) + ' ' + str(0) + '\n'
