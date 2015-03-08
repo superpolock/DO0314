@@ -43,6 +43,7 @@ def solve_it(input_data):
             if weight == capacity:
                 break
         else:
+            remainingSpace = capacity - weight
             maximumValue = value + (item.value * (remainingSpace/item.weight))
             print "MaximumValue: "+str(maximumValue)
 
