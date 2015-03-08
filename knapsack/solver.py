@@ -4,6 +4,21 @@
 from collections import namedtuple
 Item = namedtuple("Item", ['index', 'value', 'weight', 'ratio'])
 
+def greatestPossible( capacity, items, taken):
+    value = 0
+    weight = 0.0
+    for item in items:
+        if ( item.weight < capacity ):
+            if ( weight + item.weight <= capacity ):
+                value += item.value
+                optimalValue = value
+                weight += item.weight
+            else:
+                spaceAvailable = capacity - weight
+                optimalValue = value + float(spaceAvailable)*item.value/item.weight
+                break
+    return optimalValue
+
 def solve_it(input_data):
     # Modify this code to run your optimization algorithm
 
@@ -16,16 +31,16 @@ def solve_it(input_data):
 
     print "Capacity: " + format(capacity)
     items = []
-    maximumValue = 0.0
+    maximumValue = 0
 
     for i in range(1, item_count+1):
         line = lines[i]
         parts = line.split()
         value = int(parts[0])
-        maximumValue += value
         weight =  int(parts[1])
         items.append(Item(i-1, value, weight,float(value)/weight))
 
+    print "Total of all items: "+str(maximumValue)
     # Filling the knapsack in order based on the most value dense items
     value = 0
     weight = 0
@@ -35,6 +50,9 @@ def solve_it(input_data):
     for item in items:
         print item
 
+    maximumValue = greatestPossible( capacity, items, taken )
+    print "MaximumValue: "+str(maximumValue)
+
     for item in items:
         if weight + item.weight <= capacity:
             taken[item.index] = 1
@@ -42,10 +60,6 @@ def solve_it(input_data):
             weight += item.weight
             if weight == capacity:
                 break
-        else:
-            remainingSpace = capacity - weight
-            maximumValue = value + (item.value * (remainingSpace/item.weight))
-            print "MaximumValue: "+str(maximumValue)
 
     # tree to find best value
     # 
