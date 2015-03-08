@@ -43,7 +43,6 @@ def solve_it(input_data):
         else:
             remainingSpace = capacity - weight
             maximumValue = value + (item.value * (remainingSpace/item.weight))
-            break
 
     # tree to find best value
     # 
