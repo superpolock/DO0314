@@ -40,6 +40,8 @@ def solve_it(input_data):
             taken[item.index] = 1
             value += item.value
             weight += item.weight
+            if weight == capacity:
+                break
         else:
             remainingSpace = capacity - weight
             maximumValue = value + (item.value * (remainingSpace/item.weight))
