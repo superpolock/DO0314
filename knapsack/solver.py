@@ -25,14 +25,15 @@ def solve_it(input_data):
         maximumValue += value
         weight =  int(parts[1])
         items.append(Item(i-1, value, weight,float(value)/weight))
-        print items[-1]
 
     # Filling the knapsack in order based on the most value dense items
     value = 0
     weight = 0
     taken = [0]*len(items)
 
-    items = sorted(items,key=lambda item:item.ratio)
+    items = sorted(items,key=lambda item:-item.ratio)
+    for item in items:
+        print item
 
     for item in items:
         if weight + item.weight <= capacity:
