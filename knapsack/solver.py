@@ -85,6 +85,8 @@ def solve_it(input_data):
 
     taken = [0]*len(items)
 
+    sorted(items,key= lambda item: item.value/item.weight)
+
     print "Total of all items: "+str(allItemsWeight)
 
     # tree to find best value
@@ -97,7 +99,7 @@ def solve_it(input_data):
     output_data += ' '.join(map(str, taken))
 
     recursiveValue, takenValue = recursive_fill(capacity,items, takenCopy)
-    print("RecusiveValue: "+str(recursiveValue))
+    print("RecursiveValue: "+str(recursiveValue))
     print( ' '.join(map(str,takenValue)))
 
     return output_data

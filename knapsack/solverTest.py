@@ -24,5 +24,14 @@ class solverTest(unittest.TestCase):
 		self.assertLessEqual(7,solver.fill_it(self._capacity, self._items, taken )[0])
 		self.assertGreaterEqual(solver.fill_it(self._capacity, self._items, taken )[0],35)
 
+	def test_ks_lecture_dp_1(self):
+		test = solver.SolverFilePrep()
+		fileLines = test.prepData("data/ks_lecture_dp_1")
+		capacity, items = test.getData(fileLines)
+		taken = [0]*len(items)
+		valueStuffed, takenMap = solver.fill_it(capacity,items, taken)
+		self.assertEquals(valueStuffed,11)
+		
+
 if __name__ == '__main__':
     unittest.main()	
