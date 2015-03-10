@@ -18,5 +18,11 @@ class solverTest(unittest.TestCase):
 	def test_basics(self):
 		self.assertLess( self._capacity, solver.greatestPossible( self._capacity, self._items ) )
 
+	def test_bestFillYet(self):
+		taken = [0]*len(self._items)
+		print solver.fill_it(self._capacity, self._items, taken )
+		self.assertLessEqual(7,solver.fill_it(self._capacity, self._items, taken )[0])
+		self.assertGreaterEqual(solver.fill_it(self._capacity, self._items, taken )[0],35)
+
 if __name__ == '__main__':
     unittest.main()	
