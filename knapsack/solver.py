@@ -4,9 +4,10 @@
 from collections import namedtuple
 Item = namedtuple("Item", ['index', 'value', 'weight', 'ratio'])
 
-def greatestPossible( capacity, items, taken):
+def greatestPossible( capacity, items):
     value = 0
     weight = 0.0
+    optimalValue = 0.0
     for item in items:
         if ( item.weight < capacity ):
             if ( weight + item.weight <= capacity ):
@@ -20,17 +21,16 @@ def greatestPossible( capacity, items, taken):
     return optimalValue
 
 # returns a tuple of value, taken
-def fill_it(capacity, items):
+def fill_it(capacity, items, taken):
     # Filling the knapsack in order based on the most value dense items
     value = 0
     weight = 0
-    taken = [0]*len(items)
 
     items = sorted(items,key=lambda item:-item.ratio)
     for item in items:
         print item
 
-    maximumValue = greatestPossible( capacity, items, taken )
+    maximumValue = greatestPossible( capacity, items )
     print "MaximumValue: "+str(maximumValue)
 
     for item in items:
@@ -42,19 +42,28 @@ def fill_it(capacity, items):
                 break
     return(value,taken)
 
-def recursive_fill(capacity, items):
+def recursive_fill(capacity, items, taken):
+    print "Recursive Fill: " + str(capacity)
     if ( capacity > 0 ):
         if ( len(items) > 0 ):
-            valueWith, takenWith = recursive_fill(capacity - items[0].weight, items[1:] )
+            valueWith, takenWith = recursive_fill(capacity - items[0].weight, items[1:], taken )
             valueWith = valueWith + items[0].value
-            takenWith[items[0].index] = 1
-            valueWithout, takenWithout = recursive_fill( capacity, items[1:] )
+            takenWith = [1] + takenWith
+            valueWithout, takenWithout = recursive_fill( capacity, items[1:], taken )
+            takenWithout = [0] + takenWithout
             valueSet = True
+            print "Item: "+str(items[0]) + " With: " + str(valueWith) + "  " + str(valueWithout) + " : Without"
             if ( valueWith > valueWithout ):
                 return (valueWith, takenWith)
             else:
                 return(valueWithout,takenWithout)
-    return fill_it( capacity, items )
+    return fill_it( capacity, items, taken )
+
+def read_input_file(file_location):
+    input_data_file = open(file_location, 'r')
+    input_data = ''.join(input_data_file.readlines())
+    input_data_file.close()
+    return input_data
 
 def solve_it(input_data):
     # Modify this code to run your optimization algorithm
@@ -69,6 +78,7 @@ def solve_it(input_data):
     print "Capacity: " + format(capacity)
     items = []
     maximumValue = 0
+    allItemsWeight = 0
 
     for i in range(1, item_count+1):
         line = lines[i]
@@ -76,18 +86,22 @@ def solve_it(input_data):
         value = int(parts[0])
         weight =  int(parts[1])
         items.append(Item(i-1, value, weight,float(value)/weight))
+        allItemsWeight += weight
 
-    print "Total of all items: "+str(maximumValue)
+    taken = [0]*len(items)
+
+    print "Total of all items: "+str(allItemsWeight)
 
     # tree to find best value
     # 
-    value, taken = fill_it(capacity, items)
+    takenCopy = taken
+    value, taken = fill_it(capacity, items, taken)
 
     # prepare the solution in the specified output format
     output_data = str(value) + ' ' + str(0) + '\n'
     output_data += ' '.join(map(str, taken))
 
-    recursiveValue, takenValue = recursive_fill(capacity,items)
+    recursiveValue, takenValue = recursive_fill(capacity,items, takenCopy)
     print("RecusiveValue: "+str(recursiveValue))
     print( ' '.join(map(str,takenValue)))
 
@@ -98,10 +112,7 @@ import sys
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        file_location = sys.argv[1].strip()
-        input_data_file = open(file_location, 'r')
-        input_data = ''.join(input_data_file.readlines())
-        input_data_file.close()
+        input_data = read_input_file(sys.argv[1].strip())
         print solve_it(input_data)
     else:
         print 'This test requires an input file.  Please select one from the data directory. (i.e. python solver.py ./data/ks_4_0)'
