@@ -59,11 +59,6 @@ def recursive_fill(capacity, items, taken):
                 return(valueWithout,takenWithout)
     return fill_it( capacity, items, taken )
 
-def read_input_file(file_location):
-    input_data_file = open(file_location, 'r')
-    input_data = ''.join(input_data_file.readlines())
-    input_data_file.close()
-    return input_data
 
 def solve_it(input_data):
     # Modify this code to run your optimization algorithm
@@ -108,12 +103,20 @@ def solve_it(input_data):
     return output_data
 
 
+class SolverFilePrep:
+    def prepData(self, fileToProcess):
+        file_location = sys.argv[1].strip()
+        input_data_file = open(file_location, 'r')
+        input_data = ''.join(input_data_file.readlines())
+        input_data_file.close()
+        return input_data
+
 import sys
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        input_data = read_input_file(sys.argv[1].strip())
-        print solve_it(input_data)
+        solver = SolverFilePrep()
+        print solve_it(solver.prepData(sys.argv[1].strip()))
     else:
         print 'This test requires an input file.  Please select one from the data directory. (i.e. python solver.py ./data/ks_4_0)'
 
