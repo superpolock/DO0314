@@ -104,12 +104,34 @@ def solve_it(input_data):
 
 
 class SolverFilePrep:
-    def prepData(self, fileToProcess):
-        file_location = sys.argv[1].strip()
+    def prepData(self, file_location):
         input_data_file = open(file_location, 'r')
         input_data = ''.join(input_data_file.readlines())
         input_data_file.close()
         return input_data
+
+    def getData(self, input_data):
+        lines = input_data.split('\n')
+
+        firstLine = lines[0].split()
+        item_count = int(firstLine[0])
+        capacity = int(firstLine[1])
+
+        print "Capacity: " + format(capacity)
+        items = []
+        maximumValue = 0
+        allItemsWeight = 0
+
+        for i in range(1, item_count+1):
+            line = lines[i]
+            parts = line.split()
+            value = int(parts[0])
+            weight =  int(parts[1])
+            items.append(Item(i-1, value, weight,float(value)/weight))
+            allItemsWeight += weight
+
+        return( capacity, items )
+
 
 import sys
 
