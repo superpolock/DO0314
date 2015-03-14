@@ -4,9 +4,7 @@ import solver
 class solverTest(unittest.TestCase):
 
 	def setUp(self):
-		test = solver.SolverFilePrep()
-		fileLines = test.prepData("data/ks_lecture_dp_2")
-		self._capacity, self._items = test.getData(fileLines)
+		self._capacity, self._items = solver.prepData("data/ks_lecture_dp_2")
 		print "Capacity: " + str(self._capacity)
 		print "Items: " + str(self._items)
 		print "Finished setup"
@@ -16,22 +14,25 @@ class solverTest(unittest.TestCase):
 		self.assertLess(0,self._items)
 
 	def test_basics(self):
-		self.assertLess( self._capacity, solver.greatestPossible( self._capacity, self._items ) )
+		self.assertLess( self._capacity, solver.max_possible( self._capacity, self._items )[0] )
 
 	def test_bestFillYet(self):
-		taken = [0]*len(self._items)
-		print solver.fill_it(self._capacity, self._items, taken )
-		self.assertLessEqual(7,solver.fill_it(self._capacity, self._items, taken )[0])
-		self.assertGreaterEqual(solver.fill_it(self._capacity, self._items, taken )[0],35)
+		taken = 0
+		results = solver.quick_solution(self._capacity,self._items)
+		self.assertLessEqual(7,results[0])
+		self.assertGreaterEqual(results[0],35)
 
 	def test_ks_lecture_dp_1(self):
-		test = solver.SolverFilePrep()
-		fileLines = test.prepData("data/ks_lecture_dp_1")
-		capacity, items = test.getData(fileLines)
-		taken = [0]*len(items)
-		valueStuffed, takenMap = solver.fill_it(capacity,items, taken)
+		capacity, items = solver.prepData("data/ks_lecture_dp_1")
+		valueStuffed, weight, takenMap = solver.solve_it(capacity,items)
 		self.assertEquals(valueStuffed,11)
-		
+	     
+        def test_subset(self):
+		items = [solver.Item(1,2,3)]
+		items += solver.Item(3,4,5)
+		print items
+		result = solver.subset_items( items, 0 )
+		self.assertEquals(result,items)
 
 if __name__ == '__main__':
     unittest.main()	
