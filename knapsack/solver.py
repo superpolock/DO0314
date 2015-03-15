@@ -83,7 +83,7 @@ def subset_items( items, maskToRemove ):
 
 # pass in the best value, weight, taken set we have
 # initially we'll remove one item and see if we can improve capacity
-def improve_solution( value, weight, taken, capacity, items ):
+def improve_solution( value, weight, taken, capacity, items):
     # Remove more and more items from the solution to see if we can improve results
     bitMask = 1
     itemsToRemove = 1
@@ -99,6 +99,8 @@ def improve_solution( value, weight, taken, capacity, items ):
 	   print "subset_items; ",str(itemsToTry)
 	   print "ItemIdx: ",str(itemIdx),str(bitMask)
 	   result = max_possible( capacity + items[itemIdx].weight, itemsToTry )
+           if ( result[0] < value ):
+	       break
 	   print "MaxPossible result: ",str(result)
            if ( result[0] > best_solution[0] ):
                best_solution = result
@@ -113,7 +115,9 @@ def solve_it(capacity, items):
 
     value, weight, taken = quick_solution(capacity,items)
 
-    value, weight, taken = improve_solution( value, weight, taken, capacity, items )
+    print "Inital Results: ",str(value),str(weight),str(taken)
+    value, weight, taken = improve_solution( value, weight, taken, capacity, items) 
+    print "Improved Solution: ", str(value),str(weight), str(taken)
 
     print "Capacity: ",capacity
     recTuple =rec_solution(capacity,items )
