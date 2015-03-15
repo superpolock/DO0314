@@ -4,12 +4,7 @@
 from collections import namedtuple
 Item = namedtuple("Item", ['index', 'value', 'weight'])
 
-def solve_it(input_data):
-    # Modify this code to run your optimization algorithm
-
-    # parse the input
-    lines = input_data.split('\n')
-
+def format_data( lines ):
     firstLine = lines[0].split()
     item_count = int(firstLine[0])
     capacity = int(firstLine[1])
@@ -20,6 +15,15 @@ def solve_it(input_data):
         line = lines[i]
         parts = line.split()
         items.append(Item(i-1, int(parts[0]), int(parts[1])))
+    return capacity, items
+
+def solve_it(input_data):
+    # Modify this code to run your optimization algorithm
+
+    # parse the input
+    lines = input_data.split('\n')
+
+    capacity, items = format_data(lines)
 
     # a trivial greedy algorithm for filling the knapsack
     # it takes items in-order until the knapsack is full
