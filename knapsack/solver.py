@@ -86,8 +86,8 @@ def improve_solution( value, weight, taken, capacity, items):
     # iteratively, remove one selected item, and attempt to improve results
     # we want to go through one level deep for each initially, 
     itemIdx = 0
-    print "Items: ",str(len(items))
-    print "Taken: ",str(taken)
+#    print "Items: ",str(len(items))
+#    print "Taken: ",str(taken)
     while ( bitMask <= taken ):
         if ( bitMask & taken ):
            itemsToTry = subset_items( items, bitMask )
@@ -97,20 +97,44 @@ def improve_solution( value, weight, taken, capacity, items):
 #	   print "MaxPossible result: ",str(result)
            if ( result[0] > best_solution[0] ):
                best_solution = result
-               print "Improved Solution"
-	       print prep_output( best_solution[0], best_solution[2], items) 
+#               print "Improved Solution"
+#	       print prep_output( best_solution[0], best_solution[2], items) 
 	bitMask *= 2
 	itemIdx += 1
     return best_solution
 
-def solve_it(capacity, items):
+def read_lines(file_location):
+    input_data_file = open(file_location, 'r')
+    input_data = ''.join(input_data_file.readlines())
+    input_data_file.close()
+    # parse the input
+    lines = input_data.split('\n')
+    return lines
+
+def prep_data(lines):
+    firstLine = lines[0].split()
+    item_count = int(firstLine[0])
+    capacity = int(firstLine[1])
+
+    items = []
+
+    for i in range(0, item_count):
+        line = lines[i+1]
+        parts = line.split()
+        items.append(Item(i, int(parts[0]), int(parts[1])))
+
+    items = sorted(items,key=lambda item:(-float(item.value)/item.weight))
+    return (capacity, items)
+
+def solve_it(lines):
+    capacity, items = prep_data( lines )
     # Modify this code to run your optimization algorithm
 
     value, weight, taken = quick_solution(capacity,items)
 
-    print "Inital Results: ",str(value),str(weight),str(taken)
+#    print "Inital Results: ",str(value),str(weight),str(taken)
     value, weight, taken = improve_solution( value, weight, taken, capacity, items) 
-    print "Improved Solution: ", str(value),str(weight), str(taken)
+#    print "Improved Solution: ", str(value),str(weight), str(taken)
 
 #    print "Capacity: ",capacity
 #    recTuple =rec_solution(capacity,items )
@@ -124,35 +148,13 @@ def solve_it(capacity, items):
 
     return output_data
 
-def prepData(file_location):
-    input_data_file = open(file_location, 'r')
-    input_data = ''.join(input_data_file.readlines())
-    input_data_file.close()
-    # parse the input
-    lines = input_data.split('\n')
-
-    firstLine = lines[0].split()
-    item_count = int(firstLine[0])
-    capacity = int(firstLine[1])
-
-    items = []
-
-    for i in range(1, item_count+1):
-        line = lines[i]
-        parts = line.split()
-        items.append(Item(i-1, int(parts[0]), int(parts[1])))
-
-    items = sorted(items,key=lambda item:(-float(item.value)/item.weight))
-    return (capacity, items)
-
-
 import sys
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         file_location = sys.argv[1].strip()
-	capacity, items = prepData(file_location)
-        print solve_it(capacity, items)
+	filelines = read_lines(file_location)
+        print solve_it(filelines)
     else:
         print 'This test requires an input file.  Please select one from the data directory. (i.e. python solver.py ./data/ks_4_0)'
 
