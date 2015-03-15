@@ -30,7 +30,7 @@ def max_possible(capacity, items):
 
     for item in items:
         if weight + item.weight <= capacity:
-            taken += 2 ** (item.index - 1)
+            taken += 2 ** item.index
             value += item.value
             weight += item.weight
     return value, weight, taken 
@@ -71,13 +71,14 @@ def subset_items( items, maskToRemove ):
     bitmask = 1
     itemIdx = 0
     itemAdj = 0
-    while ( bitmask <= maskToRemove ):
+    return_items = []
+    print "subset_items items: ",str(items)
+    while ( itemIdx < len(items)):
         if ( False == (bitmask & maskToRemove) ):
-	     return_items += items[itemIdx]
+	       return_items.append(items[itemIdx])
         bitmask *= 2
         itemIdx += 1
-    if itemIdx < len(items):
-	return_items += items[itemIdx:]
+    print "return_items: ",str(return_items)
     return return_items
 
 # pass in the best value, weight, taken set we have
@@ -86,7 +87,7 @@ def improve_solution( value, weight, taken, capacity, items ):
     # Remove more and more items from the solution to see if we can improve results
     bitMask = 1
     itemsToRemove = 1
-    best_solution = ( value, weight, taken )
+    best_solution = ( Item(value, weight, taken ) )
     # iteratively, remove one selected item, and attempt to improve results
     # we want to go through one level deep for each initially, 
     itemIdx = 0
