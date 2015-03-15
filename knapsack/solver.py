@@ -17,6 +17,28 @@ def format_data( lines ):
         items.append(Item(i-1, int(parts[0]), int(parts[1])))
     return capacity, items
 
+# Taken will be an integer which represents all bits which are in use
+def is_taken( taken, itemIdx ):
+    return ( taken & ( 1 << itemIdx ) ) != 0
+
+# isSet is true if we are setting value and false if we are clearing it
+def set_taken( taken, itemIdx, setBit ):
+    if setBit:
+    	return taken | (1 << itemIdx)
+    else:
+        return taken & ~(1 << itemIdx)
+
+def output_bits( items, taken ):
+    output = ""
+    bitmask = 1
+    for x in xrange( len(items) ):
+	if taken & bitmask:
+	    output += " 1"
+        else:
+            output += " 0"
+        taken = taken >> 1
+    return output[ ::-1 ]
+    
 def solve_it(input_data):
     # Modify this code to run your optimization algorithm
 
@@ -29,17 +51,19 @@ def solve_it(input_data):
     # it takes items in-order until the knapsack is full
     value = 0
     weight = 0
-    taken = [0]*len(items)
+    taken = 0
 
     for item in items:
         if weight + item.weight <= capacity:
-            taken[item.index] = 1
+            taken = set_taken( taken, item.index, True )
             value += item.value
             weight += item.weight
     
     # prepare the solution in the specified output format
     output_data = str(value) + ' ' + str(0) + '\n'
-    output_data += ' '.join(map(str, taken))
+#    output_data += ' '.join(map(str, taken))
+    output_data += output_bits( items, taken )
+
     return output_data
 
 
