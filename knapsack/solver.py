@@ -7,7 +7,6 @@ Item = namedtuple("Item", ['index', 'value', 'weight'])
 def prep_output(value,taken,items):
     # prepare the solution in the specified output format
     output_data = str(value) + ' ' + str(0) + '\n'
-    print "Taken value:",taken
     takenString = ""
     for i in xrange(0,len(items)):
         if taken & 1 == 1:
@@ -25,8 +24,6 @@ def max_possible(capacity, items):
     value = 0
     weight = 0
     taken = 0
-
-    print "Items: ",str(items)
 
     for item in items:
         if weight + item.weight <= capacity:
@@ -72,13 +69,11 @@ def subset_items( items, maskToRemove ):
     itemIdx = 0
     itemAdj = 0
     return_items = []
-    print "subset_items items: ",str(items)
     while ( itemIdx < len(items)):
         if ( False == (bitmask & maskToRemove) ):
 	       return_items.append(items[itemIdx])
         bitmask *= 2
         itemIdx += 1
-    print "return_items: ",str(return_items)
     return return_items
 
 # pass in the best value, weight, taken set we have
@@ -96,12 +91,10 @@ def improve_solution( value, weight, taken, capacity, items):
     while ( bitMask <= taken ):
         if ( bitMask & taken ):
            itemsToTry = subset_items( items, bitMask )
-	   print "subset_items; ",str(itemsToTry)
-	   print "ItemIdx: ",str(itemIdx),str(bitMask)
 	   result = max_possible( capacity + items[itemIdx].weight, itemsToTry )
            if ( result[0] < value ):
 	       break
-	   print "MaxPossible result: ",str(result)
+#	   print "MaxPossible result: ",str(result)
            if ( result[0] > best_solution[0] ):
                best_solution = result
                print "Improved Solution"
@@ -119,13 +112,13 @@ def solve_it(capacity, items):
     value, weight, taken = improve_solution( value, weight, taken, capacity, items) 
     print "Improved Solution: ", str(value),str(weight), str(taken)
 
-    print "Capacity: ",capacity
-    recTuple =rec_solution(capacity,items )
-    rec_results =prep_output(recTuple[0], recTuple[2],items ) 
-    print "Recursive Solution: ",str(rec_results)
+#    print "Capacity: ",capacity
+#    recTuple =rec_solution(capacity,items )
+#    rec_results =prep_output(recTuple[0], recTuple[2],items ) 
+#    print "Recursive Solution: ",str(rec_results)
 
-    for item in items:
-        print str(item),str(float(item.value)/item.weight)
+#    for item in items:
+#        print str(item),str(float(item.value)/item.weight)
 
     output_data = prep_output(value,taken,items)
 
