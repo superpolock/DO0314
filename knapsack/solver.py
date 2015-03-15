@@ -38,15 +38,8 @@ def output_bits( items, taken ):
             output += " 0"
         taken = taken >> 1
     return output[ ::-1 ]
-    
-def solve_it(input_data):
-    # Modify this code to run your optimization algorithm
 
-    # parse the input
-    lines = input_data.split('\n')
-
-    capacity, items = format_data(lines)
-
+def simple_packing( capacity, items ):
     # a trivial greedy algorithm for filling the knapsack
     # it takes items in-order until the knapsack is full
     value = 0
@@ -58,6 +51,16 @@ def solve_it(input_data):
             taken = set_taken( taken, item.index, True )
             value += item.value
             weight += item.weight
+    return value, weight, taken
+    
+def solve_it(input_data):
+    # Modify this code to run your optimization algorithm
+
+    # parse the input
+    lines = input_data.split('\n')
+
+    capacity, items = format_data(lines)
+    value, weight, taken = simple_packing( capacity, items )
     
     # prepare the solution in the specified output format
     output_data = str(value) + ' ' + str(0) + '\n'
