@@ -29,12 +29,13 @@ def set_taken( taken, itemIdx, setBit ):
         return taken & ~(1 << itemIdx)
 
 def recursive_test( capacity, items, min_needed ):
+    print "Recursive_test: ",str(capacity),str(min_needed)
     if ( len(items) > 0 ):
-        max_possible = simple_packing( capacity, items )
+        max_possible = optimal_chocolate_packing( capacity, items )
         if ( min_needed <= max_possible ):
-            without_results = recursive_test( capacity, items[1:], min_needed )
+            without_results = recursive_test( capacity, items[1:], min_needed)
             if ( capacity >= items[0].weight ):
-	        temp = recursive_test( capacity - items[0].weight, items[1:], min_needed )
+	        temp = recursive_test( capacity - items[0].weight, items[1:], max(min_needed,without_results[0]) )
 	        with_results = ( temp[0]+items[0].value,temp[1]+items[0].weight, temp[2]+ 2 ** items[0].index )
                 if ( with_results[0] >= without_results[0] ):
 		    return with_results
@@ -79,14 +80,38 @@ def best_possible( capacity, items, taken_not_allowed=0 ):
     free_space = float(capacity - weight)
     best_attempt = (value,weight,taken)
     for item in items:
-        print "Item: ",str(item)
+        # print "Item: ",str(item)
         item_bitmask = 1 << item.index
         if ( is_taken( taken, item.index ) ):
             next_try = simple_packing( capacity, items, item_bitmask )
-            print "Next Try: ",str(next_try), "  BitMask: ", str(item_bitmask)
+            # print "Next Try: ",str(next_try), "  BitMask: ", str(item_bitmask)
             if ( next_try[0] > best_attempt[0] ):
                 best_attempt = next_try
     return best_attempt
+
+def optimal_chocolate_packing( capacity, sorted_items ):
+    weight = 0
+    value = 0
+    unused_items = []
+    taken = 0
+    for item in sorted_items:
+        taken += 2 ** item.index
+        if ( weight + item.weight <= capacity ):
+            value += item.value
+        else:
+            value += float(item.value)/item.weight * (capacity - weight)
+            break;
+    return value, taken
+
+def confirm_value( items, taken ):
+    value = 0
+    weight = 0
+    for i in xrange(0,len(items)):
+         if ( taken & 1 << i ):
+	     value += items[i].value
+             weight += items[i].weight
+             print str(value), str(weight), str(items[i]) 
+    return value, weight
 
 def solve_it(input_data):
     # Modify this code to run your optimization algorithm
@@ -97,28 +122,39 @@ def solve_it(input_data):
     capacity, items = format_data(lines)
     sorted( items, key=lambda item: -(float(item.value)/item.weight) )
 
-    print "Capacity: ",capacity
-    for item in items:
-	print item, (float(item.value)/item.weight)
+    # print "Capacity: ",capacity
+#    for item in items:
+#	print item, (float(item.value)/item.weight)
+    print "Highest possible: ",str( optimal_chocolate_packing( capacity, items ) )
 
-    print "Recursive Max: ", str( recursive_test( capacity, items, 0 ) )
-
-    print "Best Possible: ",str(best_possible(capacity,items))
+  #  print "Best Possible: ",str(best_possible(capacity,items))
     value, weight, taken = simple_packing( capacity, items )
+    v1, w1 = confirm_value( items, taken )
+    if ( v1 != value ):
+        print "Value of ",str(value), " differs from calculated value of ",str(v1)
+    if ( w1 != weight ):
+        print "Weight of ",str(weight), " differs from calculated weight of ",str(w1)
     
     # prepare the solution in the specified output format
     output_data = str(value) + ' ' + str(0) + '\n'
-#    output_data += ' '.join(map(str, taken))
-    output_data += output_bits( items, taken )
+    #output_data += ' '.join(map(str, taken))
+    print "Output Data:",output_data,str(taken)
+    #output_data += output_bits( items, taken )
 
     value2, weight2, taken2 = best_possible( capacity, items )
     output_data2 = str(value2) + ' ' + str(0) + '\n'
+    v2, w2 = confirm_value( items, taken2 )
+    if ( v2 != value2 ):
+        print "Value2 of ",str(value2), " differs from calculated value of ",str(v2)
+    if ( w1 != weight ):
+        print "Weight2 of ",str(weight2), " differs from calculated weight of ",str(w2)
 #    output_data += ' '.join(map(str, taken))
-    output_data2 += output_bits( items, taken2 )
+#    output_data2 += output_bits( items, taken2 )
 
     print "Output Data2: ",output_data2
+    #print "Recursive Max: ", str( recursive_test( capacity, items, 0 ) )
 
-    return output_data
+    return output_data2
 
 
 import sys
