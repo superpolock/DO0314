@@ -19,8 +19,12 @@ class Samples(unittest.TestCase):
         self.assertEqual(lines[0],"2 1")
 # and the second object was whether or not solution is optimal
         colors = set()
+        nodeIdx = 0
+        nodes = []
         for color in lines[1].split():
             colors.add(int(color))
+            nodes[nodeIdx]=color
+            nodeIdx++
         self.assertEqual(len(colors),2)
         self.assertTrue(1 in colors)
         self.assertTrue(0 in colors)
