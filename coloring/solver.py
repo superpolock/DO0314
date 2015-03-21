@@ -1,11 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-
-def solve_it(input_data):
-    # Modify this code to run your optimization algorithm
-
-    # parse the input
+# pass in text of file as a single line
+# returns node_count, edge_count, edges tuple
+def parse_it(input_data):
     lines = input_data.split('\n')
 
     first_line = lines[0].split()
@@ -17,6 +15,13 @@ def solve_it(input_data):
         line = lines[i]
         parts = line.split()
         edges.append((int(parts[0]), int(parts[1])))
+    return(node_count, edge_count, edges, line, parts) 
+
+def solve_it(input_data):
+    # Modify this code to run your optimization algorithm
+
+    # parse the input
+    node_count, edge_count, edges, line, parts = parse_it(input_data)
 
     # build a trivial solution
     # every node has its own color
