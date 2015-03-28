@@ -15,23 +15,26 @@ class Samples(unittest.TestCase):
     def testSolveIt(self):
         results = solver.solve_it(self.simple)
         lines = results.splitlines()
-# first line is the number of colors
-        self.assertEqual(lines[0],"2 1")
 # and the second object was whether or not solution is optimal
         colors = set()
         nodeIdx = 0
-        nodes = []
+        nodes = {}
         for color in lines[1].split():
             colors.add(int(color))
             nodes[nodeIdx]=color
-            nodeIdx++
+            nodeIdx += 1
+# first line is the number of colors
+        self.assertEqual(lines[0],"4 0")
+        print 'Nodes: ',str(nodes)
         self.assertEqual(len(colors),2)
         self.assertTrue(1 in colors)
         self.assertTrue(0 in colors)
         self.assertTrue(2 not in colors)
         self.assertTrue(3 not in colors)
 
-
-
+    def testFindLowest(self):
+        sampleList = [4,3,2,1]
+        print min(sampleList)
+        self.assertTrue(1 == min(sampleList))
 if __name__ == "__main__":
         unittest.main()   
