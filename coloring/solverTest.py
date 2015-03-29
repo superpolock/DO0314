@@ -19,7 +19,9 @@ class Samples(unittest.TestCase):
         colors = set()
         nodeIdx = 0
         nodes = {}
+        print "Line[1]: ",lines[1]
         for color in lines[1].split():
+            print "color: '",str(color),"'"
             colors.add(int(color))
             nodes[nodeIdx]=color
             nodeIdx += 1

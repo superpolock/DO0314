@@ -58,7 +58,11 @@ def color_it( node_cnt, edges ):
                 max_color_used += 1
                 colors[nodeIdx] = max_color_used
 
-    return max_color_used, colors
+    returnValue = ""
+    for color in colors:
+        returnValue += str(color)+' '
+
+    return max_color_used, returnValue
 
 def solve_it(input_data):
     # Modify this code to run your optimization algorithm
