@@ -38,5 +38,22 @@ class Samples(unittest.TestCase):
         sampleList = [4,3,2,1]
         print min(sampleList)
         self.assertTrue(1 == min(sampleList))
+
+    def testNumberOfElements(self):
+        results = solver.solve_it(self.simple)
+        lines = results.splitlines()
+        self.assertEqual(2,len(lines))
+        self.assertEqual(4,len(lines[1].split()))
+
+    def testCreateNodes(self):
+        node_count, edge_count, edges, line, parts = solver.parse_it(self.simple)
+        nodes = solver.create_nodes(node_count,edges)
+        self.assertEqual(len(nodes),node_count)
+
+    def testColorIt(self):
+        node_count, edge_count, edges, line, parts = solver.parse_it(self.simple)
+        results = solver.color_it(node_count,edges)
+        self.assertEqual(len(results[1]),node_count)
+
 if __name__ == "__main__":
         unittest.main()   

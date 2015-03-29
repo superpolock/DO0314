@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# from pudb import set_trace; set_trace()
+
 # pass in text of file as a single line
 # returns node_count, edge_count, edges tuple
 def parse_it(input_data):
@@ -42,15 +44,10 @@ def color_it( node_cnt, edges ):
     nodes = create_nodes( node_cnt, edges )
     colors = [-1]*node_cnt
     max_color_used = -1
-    print "Nodes: ",str(nodes)
-    max_color_used += 1
-    colors[0] = max_color_used
     for nodeIdx in nodes:
         used_colors = get_used_colors(colors, nodes[ nodeIdx ] )
         if ( colors[ nodeIdx ] == -1 ):
             for test_color in xrange(0,max_color_used):
-                print "NodeIdx: ",str(nodeIdx)
-                print "Node[nodeidx]: ",str(nodes[nodeIdx])
                 if ( test_color not in used_colors ):
                     colors[nodeIdx] = test_color
                     break
@@ -60,7 +57,7 @@ def color_it( node_cnt, edges ):
 
     returnValue = ""
     for color in colors:
-        returnValue += str(color)+' '
+        returnValue += str(color)
 
     return max_color_used, returnValue
 
@@ -77,7 +74,7 @@ def solve_it(input_data):
 
     # prepare the solution in the specified output format
     output_data = str(node_count) + ' ' + str(0) + '\n'
-    output_data += ' '.join(map(str, solution))
+    output_data += ' '.join(map(str, solution[1]))
 
     return output_data
 
