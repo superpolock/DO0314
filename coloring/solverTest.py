@@ -26,7 +26,7 @@ class Samples(unittest.TestCase):
             nodes[nodeIdx]=color
             nodeIdx += 1
 # first line is the number of colors
-        self.assertEqual(lines[0],"4 0")
+        self.assertEqual(lines[0],"2 1")
         print 'Nodes: ',str(nodes)
         self.assertEqual(len(colors),2)
         self.assertTrue(1 in colors)
@@ -53,7 +53,10 @@ class Samples(unittest.TestCase):
     def testColorIt(self):
         node_count, edge_count, edges, line, parts = solver.parse_it(self.simple)
         results = solver.color_it(node_count,edges)
-        self.assertEqual(len(results[1]),node_count)
+        print "NodeCount: ",str(node_count)
+        print "edges: ",str(edges)
+        print "results: ",str(results)
+        self.assertEqual(len(results[3]),node_count)
 
 if __name__ == "__main__":
         unittest.main()   

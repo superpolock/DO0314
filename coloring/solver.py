@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# from pudb import set_trace; set_trace()
+#from pudb import set_trace; set_trace()
 
 # pass in text of file as a single line
 # returns node_count, edge_count, edges tuple
@@ -59,7 +59,7 @@ def color_it( node_cnt, edges ):
     for color in colors:
         returnValue += str(color)
 
-    return max_color_used+1, returnValue
+    return nodes, max_color_used+1, colors, returnValue
 
 def solve_it(input_data):
     # Modify this code to run your optimization algorithm
@@ -70,11 +70,12 @@ def solve_it(input_data):
     # build a trivial solution
     # every node has its own color
 #    solution = range(0, node_count)
-    solution = color_it(node_count,edges)
+    nodes, colors_used, colors, colors_array = color_it(node_count,edges)
 
     # prepare the solution in the specified output format
-    output_data = str(solution[0]) + ' ' + str(1) + '\n'
-    output_data += ' '.join(map(str, solution[1]))
+    output_data = str(colors_used) + ' ' + str(1) + '\n'
+    for color in colors_array:
+        output_data += color + ' '
 
     return output_data
 
